@@ -1,0 +1,7 @@
+.card-text{
+    color: var(--white);
+}
+
+.card-content{
+    background-color: var(--azul);
+}

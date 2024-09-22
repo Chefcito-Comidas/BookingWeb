@@ -1,0 +1,12 @@
+.button-container{
+    display: flex;
+    justify-content: center;
+}
+
+.carousel-images{
+    position: absolute;
+}
+
+.submitButton{
+    margin-right: 8px;
+}
