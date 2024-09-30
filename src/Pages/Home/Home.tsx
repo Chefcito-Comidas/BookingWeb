@@ -118,117 +118,116 @@ const Home = () => {
     }
 
     return (
-        <Container style={{marginTop:16}}>
-            
-            {data&&<>
-                {/* <Carousel >
-                    {data.pictures.map((image,index)=><Carousel.Item key={index}><Image src={image}/></Carousel.Item>)}
-                </Carousel> */}
-                <Stepper activeStep={active} style={{marginBottom:12,backgroundColor:'transparent'}}>
-                    {steps.map((label, index) => {
-                        return (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        );
-                    })}
-                </Stepper>
-                {active===0&&
-                <>
-                    <Row>
-                        <People data={people?people.toString():''} restaurant={data} setPeople={(value)=>{
-                            const parse = parseInt(value)
-                            if(parse&&parse>0) {
-                                setPeople(parse)
-                            } else {
-                                setPeople(null)
-                            }
-                        }} />
-                    </Row>
-                    <Row>
-                        <Col className="next-button"></Col>
-                        <Col className="next-button"><Button onClick={()=> setActive(1)} disabled={!people||people<1}>Siguiente</Button></Col>
-                    </Row>
-                </>
-                }
-                {active===1&&
-                <>
-                    <Row>
-                        <Date data={date} restaurant={data} setData={setDate} />
-                    </Row>
-                    <Row>
-                        <Col className="next-button"><Button onClick={()=> setActive(0)}>Atras</Button></Col>
-                        <Col className="next-button"><Button onClick={()=> setActive(2)} disabled={!date}>Siguiente</Button></Col>
-                    </Row>
-                </>
-                }
-                {active===2&&
-                <>
-                    <Row>
-                        <Turn data={turn} restaurant={data} setData={setTurn} />
-                    </Row>
-                    <Row>
-                        <Col className="next-button"><Button onClick={()=> setActive(1)}>Atras</Button></Col>
-                        <Col className="next-button"><Button onClick={()=> setActive(3)} disabled={!turn}>Siguiente</Button></Col>
-                    </Row>
-                </>
-                }
-                {active===3&&
-                <>
-                    <Row>
-                        <Confirm people={people} date={date} turn={turn} />
-                    </Row>
-                    <Row>
-                        <Col className="next-button"><Button onClick={()=> setActive(2)}>Atras</Button></Col>
-                        <Col className="next-button"><Button onClick={()=> {setShow(true)}}>Crear Reserva</Button></Col>
-                    </Row>
-                </>
-                }
-            </>}
-            {loading&&<Loading />}
+        <div className="container-image">
+            <Container style={{backgroundColor:'white',padding:12}} >
+                {data&&<>
+                    <div className="logo-image"><Image src={data.logo} height={70} /></div>
+                    <Stepper activeStep={active} style={{marginBottom:12,backgroundColor:'transparent'}}>
+                        {steps.map((label, index) => {
+                            return (
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
+                    {active===0&&
+                    <>
+                        <Row>
+                            <People data={people?people.toString():''} restaurant={data} setPeople={(value)=>{
+                                const parse = parseInt(value)
+                                if(parse&&parse>0) {
+                                    setPeople(parse)
+                                } else {
+                                    setPeople(null)
+                                }
+                            }} />
+                        </Row>
+                        <Row>
+                            <Col className="next-button"></Col>
+                            <Col className="next-button"><Button onClick={()=> setActive(1)} disabled={!people||people<1}>Siguiente</Button></Col>
+                        </Row>
+                    </>
+                    }
+                    {active===1&&
+                    <>
+                        <Row>
+                            <Date data={date} restaurant={data} setData={setDate} />
+                        </Row>
+                        <Row>
+                            <Col className="next-button"><Button onClick={()=> setActive(0)}>Atras</Button></Col>
+                            <Col className="next-button"><Button onClick={()=> setActive(2)} disabled={!date}>Siguiente</Button></Col>
+                        </Row>
+                    </>
+                    }
+                    {active===2&&
+                    <>
+                        <Row>
+                            <Turn data={turn} restaurant={data} setData={setTurn} />
+                        </Row>
+                        <Row>
+                            <Col className="next-button"><Button onClick={()=> setActive(1)}>Atras</Button></Col>
+                            <Col className="next-button"><Button onClick={()=> setActive(3)} disabled={!turn}>Siguiente</Button></Col>
+                        </Row>
+                    </>
+                    }
+                    {active===3&&
+                    <>
+                        <Row>
+                            <Confirm people={people} date={date} turn={turn} />
+                        </Row>
+                        <Row>
+                            <Col className="next-button"><Button onClick={()=> setActive(2)}>Atras</Button></Col>
+                            <Col className="next-button"><Button onClick={()=> {setShow(true)}}>Crear Reserva</Button></Col>
+                        </Row>
+                    </>
+                    }
+                </>}
+                {loading&&<Loading />}
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                <Modal.Title>Log in</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Formik
-                            validationSchema={schema}
-                            onSubmit={onLogin}
-                            initialValues={{
-                                email:'',
-                                password:''
-                            }}
-                    >
-                        {({ handleSubmit, handleChange, values, touched, errors }) => (
-                                <Form noValidate onSubmit={handleSubmit}>
-                                    <Form.Group className="mb-3" controlId="email">
-                                        <Form.Control type="email" placeholder="Email*"
-                                        value={values.email}
-                                        onChange={handleChange}
-                                        isValid={touched.email && !errors.email}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="password">
-                                        <Form.Control type="password" placeholder="Contraseña*"
-                                        value={values.password}
-                                        onChange={handleChange}
-                                        isValid={touched.password && !errors.password}
-                                        />
-                                    </Form.Group>
-                                    <Button className='submitButton' type="submit">
-                                        Ingresar
-                                    </Button>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Log in</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Formik
+                                validationSchema={schema}
+                                onSubmit={onLogin}
+                                initialValues={{
+                                    email:'',
+                                    password:''
+                                }}
+                        >
+                            {({ handleSubmit, handleChange, values, touched, errors }) => (
+                                    <Form noValidate onSubmit={handleSubmit}>
+                                        <Form.Group className="mb-3" controlId="email">
+                                            <Form.Control type="email" placeholder="Email*"
+                                            value={values.email}
+                                            onChange={handleChange}
+                                            isValid={touched.email && !errors.email}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="password">
+                                            <Form.Control type="password" placeholder="Contraseña*"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            isValid={touched.password && !errors.password}
+                                            />
+                                        </Form.Group>
+                                        <Button className='submitButton' type="submit">
+                                            Ingresar
+                                        </Button>
 
-                                    <Button onClick={googleLogin}>
-                                        Ingresar con Google
-                                    </Button>
-                                </Form>
-                            )}
-                    </Formik>
-                </Modal.Body>
-            </Modal>
-        </Container>
+                                        <Button onClick={googleLogin}>
+                                            Ingresar con Google
+                                        </Button>
+                                    </Form>
+                                )}
+                        </Formik>
+                    </Modal.Body>
+                </Modal>
+            </Container>
+        </div>
     )
 }
 
