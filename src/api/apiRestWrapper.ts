@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { BASE_URL, REQUEST_TIMEOUT } from "../utils/constants";
 

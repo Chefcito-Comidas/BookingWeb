@@ -1,7 +1,6 @@
 import { Card, Container, Row } from "react-bootstrap";
 import "./Confirm.css"
 import moment from "moment";
-import { Value } from "../Date/Date";
 type Props = {
     date:any;
     people:number | null;

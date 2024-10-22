@@ -9,7 +9,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import People from "./People/People";
-import { Button, Row,Container, Col, Carousel, Image, Modal, Form } from "react-bootstrap";
+import { Button, Row,Container, Col, Image, Modal, Form } from "react-bootstrap";
 import Date, { Value } from "./Date/Date";
 import Turn from "./Turn/Turn";
 import Confirm from "./Confirm/Confirm";

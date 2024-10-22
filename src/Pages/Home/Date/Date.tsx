@@ -3,7 +3,6 @@ import { Restaurant } from "../../../models/Restauran.model";
 import Calendar from 'react-calendar';
 import "./Date.css";
 import moment from "moment";
-import { useEffect } from "react";
 export type ValuePiece = Date | null;
 
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
