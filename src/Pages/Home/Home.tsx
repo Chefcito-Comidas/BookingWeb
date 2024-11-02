@@ -38,11 +38,6 @@ const Home = () => {
     const handleClose = () => {
         setShow(false)
     };
-    useEffect(()=>{
-        setTimeout(()=>{
-            setShowLogInError(false)
-        },1000)
-    },[showLogInError])
     const { Formik } = formik;
 
     const schema = yup.object().shape({
@@ -105,9 +100,12 @@ const Home = () => {
             } else {
                 // error en la creacion de usuario
                 setLoading(false)
+                setShowLogInError(true)
+
             }
         } catch (err) {
             console.log(err)
+            setLoading(false)
             setShowLogInError(true)
         }
     }
@@ -129,9 +127,9 @@ const Home = () => {
 
     return (
         <div className="container-image">
-            <Container style={{backgroundColor:'white',padding:12}} >
+            <Container style={{backgroundColor:'white',padding:12,minHeight:350}} >
                 {data&&<>
-                    <div className="logo-image"><Image src={data.logo} height={70} /></div>
+                    <div className="logo-image"><Image src={data.logo} height={250} /></div>
                     <Stepper activeStep={active} style={{marginBottom:12,backgroundColor:'transparent'}}>
                         {steps.map((label, index) => {
                             return (
@@ -237,7 +235,7 @@ const Home = () => {
                     </Modal.Body>
                 </Modal>
             </Container>
-            <Alert variant="danger" show={showLogInError} onClose={() => setShowLogInError(false)} dismissible style={{position:'fixed',top:100,left:'30%',zIndex:1000}}>
+            <Alert variant="danger" show={showLogInError} onClose={() => setShowLogInError(false)} dismissible style={{position:'fixed',top:100,left:'42%',zIndex:100000}}>
                 <Alert.Heading>Error</Alert.Heading>
                 <p>
                     Mail o contraseña incorrecto
