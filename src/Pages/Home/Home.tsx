@@ -9,7 +9,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import People from "./People/People";
-import { Button, Row,Container, Col, Image, Modal, Form } from "react-bootstrap";
+import { Button, Row,Container, Col, Image, Modal, Form, Alert } from "react-bootstrap";
 import Date, { Value } from "./Date/Date";
 import Turn from "./Turn/Turn";
 import Confirm from "./Confirm/Confirm";
@@ -31,13 +31,18 @@ const Home = () => {
     const [people,setPeople] = useState<number|null>(null)
     const [date,setDate] = useState<Value|null>(null)
     const [turn,setTurn] = useState<string|null>(null)
+    const [showLogInError,setShowLogInError] = useState(false)
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
         setShow(false)
     };
-
+    useEffect(()=>{
+        setTimeout(()=>{
+            setShowLogInError(false)
+        },1000)
+    },[showLogInError])
     const { Formik } = formik;
 
     const schema = yup.object().shape({
@@ -85,20 +90,25 @@ const Home = () => {
 
     const onLogin = async (values:any) =>{
         setLoading(true)
-        const user = await loginUserPassword(values.email,values.password)
-        console.log('login',user)
-        const token = await user?.getIdToken()
-        if(user !== null&&token) {
-            try {
-                await CreateUser(token)
-            } catch (err){
-
+        try {
+            const user = await loginUserPassword(values.email,values.password)
+            console.log('login',user)
+            const token = await user?.getIdToken()
+            if(user !== null&&token) {
+                try {
+                    await CreateUser(token)
+                } catch (err){
+    
+                }
+                await createBooking(token)
+                handleClose()
+            } else {
+                // error en la creacion de usuario
+                setLoading(false)
             }
-            await createBooking(token)
-            handleClose()
-        } else {
-            // error en la creacion de usuario
-            setLoading(false)
+        } catch (err) {
+            console.log(err)
+            setShowLogInError(true)
         }
     }
 
@@ -227,6 +237,12 @@ const Home = () => {
                     </Modal.Body>
                 </Modal>
             </Container>
+            <Alert variant="danger" show={showLogInError} onClose={() => setShowLogInError(false)} dismissible style={{position:'fixed',top:100,left:'30%',zIndex:1000}}>
+                <Alert.Heading>Error</Alert.Heading>
+                <p>
+                    Mail o contraseña incorrecto
+                </p>
+            </Alert>
         </div>
     )
 }
