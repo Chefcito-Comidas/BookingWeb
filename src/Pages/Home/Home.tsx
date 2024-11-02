@@ -15,7 +15,7 @@ import Turn from "./Turn/Turn";
 import Confirm from "./Confirm/Confirm";
 import * as formik from 'formik';
 import * as yup from 'yup';
-import { loginUserPassword, signInWithGoogle } from "../../api/googleAuth";
+import { createUserPassword, loginUserPassword, signInWithGoogle } from "../../api/googleAuth";
 import { CreateUser } from "../../api/authRestApi";
 import { PostBooking } from "../../api/bookings";
 import moment from "moment";
@@ -32,8 +32,10 @@ const Home = () => {
     const [date,setDate] = useState<Value|null>(null)
     const [turn,setTurn] = useState<string|null>(null)
     const [showLogInError,setShowLogInError] = useState(false)
+    const [showSignUpError,setShowSignUpError] = useState(false)
 
     const [show, setShow] = useState(false);
+    const [showNewAccount, setShowNewAccount] = useState(false);
 
     const handleClose = () => {
         setShow(false)
@@ -43,6 +45,12 @@ const Home = () => {
     const schema = yup.object().shape({
         email:yup.string().required(),
         password:yup.string().required(),
+    });
+
+    const signUpSchema = yup.object().shape({
+        email:yup.string().required(),
+        password:yup.string().required(),
+        phone:yup.string().required(),
     });
 
     const createBooking = async (token:string) => {
@@ -90,11 +98,6 @@ const Home = () => {
             console.log('login',user)
             const token = await user?.getIdToken()
             if(user !== null&&token) {
-                try {
-                    await CreateUser(token)
-                } catch (err){
-    
-                }
                 await createBooking(token)
                 handleClose()
             } else {
@@ -122,6 +125,31 @@ const Home = () => {
             }
             await createBooking(token)
             handleClose()
+        }
+    }
+
+    const showCreateAccaount = () =>{
+        setShow(false)
+        setShowNewAccount(true)
+    }
+
+    const SignUp = async (values:any) => {
+        const user = await createUserPassword(values.email,values.password)
+        console.log('login',user)
+        const token = await user?.getIdToken()
+        if(user !== null&&token) {
+            try {
+                await CreateUser(token,values.phone)
+                await createBooking(token)
+                setShowNewAccount(false)
+            } catch (err){
+
+            }
+            
+        } else {
+            // error en la creacion de usuario
+            setLoading(false)
+            setShowSignUpError(true)
         }
     }
 
@@ -229,6 +257,64 @@ const Home = () => {
                                         <Button onClick={googleLogin}>
                                             Ingresar con Google
                                         </Button>
+
+                                        <Button onClick={showCreateAccaount} style={{marginLeft:8}}>
+                                            Crear Cuenta
+                                        </Button>
+                                    </Form>
+                                )}
+                        </Formik>
+                    </Modal.Body>
+                </Modal>
+
+                <Modal show={showNewAccount} onHide={()=>setShowNewAccount(false)}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Sign Up</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Formik
+                                validationSchema={signUpSchema}
+                                onSubmit={SignUp}
+                                initialValues={{
+                                    email:'',
+                                    password:'',
+                                    phone:''
+                                }}
+                        >
+                            {({ handleSubmit, handleChange, values, touched, errors }) => (
+                                    <Form noValidate onSubmit={handleSubmit}>
+                                        <Form.Group className="mb-3" controlId="email">
+                                            <Form.Control type="email" placeholder="Email*"
+                                            value={values.email}
+                                            onChange={handleChange}
+                                            isValid={touched.email && !errors.email}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="phone">
+                                            <Form.Control type="text" placeholder="Telefono*"
+                                            value={values.phone}
+                                            onChange={handleChange}
+                                            isValid={touched.phone && !errors.phone}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="password">
+                                            <Form.Control type="password" placeholder="Contraseña*"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            isValid={touched.password && !errors.password}
+                                            />
+                                        </Form.Group>
+                                        <Button className='submitButton' type="submit">
+                                            Crear Cuenta
+                                        </Button>
+
+                                        <Button onClick={googleLogin}>
+                                            Ingresar con Google
+                                        </Button>
+
+                                        <Button onClick={()=>{setShow(true);setShowNewAccount(false)}} style={{marginLeft:8}}>
+                                            Log In
+                                        </Button>
                                     </Form>
                                 )}
                         </Formik>
@@ -236,9 +322,15 @@ const Home = () => {
                 </Modal>
             </Container>
             <Alert variant="danger" show={showLogInError} onClose={() => setShowLogInError(false)} dismissible style={{position:'fixed',top:100,left:'42%',zIndex:100000}}>
-                <Alert.Heading>Error</Alert.Heading>
+                <Alert.Heading>Error al Logearse</Alert.Heading>
                 <p>
                     Mail o contraseña incorrecto
+                </p>
+            </Alert>
+            <Alert variant="danger" show={showSignUpError} onClose={() => setShowSignUpError(false)} dismissible style={{position:'fixed',top:100,left:'39%',zIndex:100000}}>
+                <Alert.Heading>Error Creando Usuario</Alert.Heading>
+                <p>
+                    Hubo un error al crear el usuario. Por favor contacte al soporte.
                 </p>
             </Alert>
         </div>
