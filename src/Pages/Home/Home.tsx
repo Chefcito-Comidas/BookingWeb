@@ -27,6 +27,8 @@ const Home = () => {
     const [data, setData] = useState<Restaurant|null>(null)
     const [loading,setLoading] = useState<boolean>(false)
     const [active, setActive] = useState(0);
+    const [showSuccess,setShowSuccess] = useState(false)
+    const [showBookingError,setShowBookingError] = useState(false)
 
     const [people,setPeople] = useState<number|null>(null)
     const [date,setDate] = useState<Value|null>(null)
@@ -39,6 +41,7 @@ const Home = () => {
 
     const handleClose = () => {
         setShow(false)
+        setShowNewAccount(false)
     };
     const { Formik } = formik;
 
@@ -56,6 +59,7 @@ const Home = () => {
     const createBooking = async (token:string) => {
         try {
             if(people&&id&&turn) {
+                setLoading(true)
                 const turnData = turn.split(':') 
                 const newDate = date as Date;
                 const result = await PostBooking({
@@ -63,12 +67,13 @@ const Home = () => {
                     people:people,
                     venue:id,
                 },token)
+                setLoading(false)
                 console.log('new booking',result)
-                alert('Reserva creada Exitosamente')
+                setShowSuccess(true)
             }
         } catch(err) {
             console.error('PostBooking',err)
-            alert('Error al momento de crear la reserva. Pro favor intente nuevamente')
+            setShowBookingError(true)
         }
     }
 
@@ -142,6 +147,7 @@ const Home = () => {
                 await CreateUser(token,values.phone)
                 await createBooking(token)
                 setShowNewAccount(false)
+                handleClose()
             } catch (err){
 
             }
@@ -331,6 +337,18 @@ const Home = () => {
                 <Alert.Heading>Error Creando Usuario</Alert.Heading>
                 <p>
                     Hubo un error al crear el usuario. Por favor contacte al soporte.
+                </p>
+            </Alert>
+            <Alert variant="success" show={showSuccess} onClose={() => setShowSuccess(false)} dismissible style={{position:'fixed',top:50,left:'40%',zIndex:1000}}>
+                <Alert.Heading>Exito</Alert.Heading>
+                <p>
+                    Reserva creada con exito
+                </p>
+            </Alert>
+            <Alert variant="danger" show={showBookingError} onClose={() => setShowBookingError(false)} dismissible style={{position:'fixed',top:100,left:'39%',zIndex:100000}}>
+                <Alert.Heading>Error Creando Reserva</Alert.Heading>
+                <p>
+                    Error al momento de crear la reserva. Pro favor intente nuevamente
                 </p>
             </Alert>
         </div>
