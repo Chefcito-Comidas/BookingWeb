@@ -70,6 +70,7 @@ const Home = () => {
                 setLoading(false)
                 console.log('new booking',result)
                 setShowSuccess(true)
+                CleanData()
             }
         } catch(err) {
             console.error('PostBooking',err)
@@ -157,6 +158,13 @@ const Home = () => {
             setLoading(false)
             setShowSignUpError(true)
         }
+    }
+
+    const CleanData = () =>{
+        setActive(0)
+        setPeople(null)
+        setDate(null)
+        setTurn(null)
     }
 
     return (
