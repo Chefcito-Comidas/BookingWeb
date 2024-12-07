@@ -171,7 +171,8 @@ const Home = () => {
         <div className="container-image">
             <Container style={{backgroundColor:'white',padding:12,minHeight:350}} >
                 {data&&<>
-                    <div className="logo-image"><Image src={data.logo} height={250} /></div>
+                    
+                    {/* <div className="logo-image"><Image src={data.logo} height={250} /></div> */}
                     <Stepper activeStep={active} style={{marginBottom:12,backgroundColor:'transparent'}}>
                         {steps.map((label, index) => {
                             return (
@@ -181,57 +182,65 @@ const Home = () => {
                             );
                         })}
                     </Stepper>
-                    {active===0&&
-                    <>
-                        <Row>
-                            <People data={people?people.toString():''} restaurant={data} setPeople={(value)=>{
-                                const parse = parseInt(value)
-                                if(parse&&parse>0) {
-                                    setPeople(parse)
-                                } else {
-                                    setPeople(null)
-                                }
-                            }} />
-                        </Row>
-                        <Row>
-                            <Col className="next-button"></Col>
-                            <Col className="next-button"><Button onClick={()=> setActive(1)} disabled={!people||people<1}>Siguiente</Button></Col>
-                        </Row>
-                    </>
-                    }
-                    {active===1&&
-                    <>
-                        <Row>
-                            <Date data={date} restaurant={data} setData={setDate} />
-                        </Row>
-                        <Row>
-                            <Col className="next-button"><Button onClick={()=> setActive(0)}>Atras</Button></Col>
-                            <Col className="next-button"><Button onClick={()=> setActive(2)} disabled={!date}>Siguiente</Button></Col>
-                        </Row>
-                    </>
-                    }
-                    {active===2&&
-                    <>
-                        <Row>
-                            <Turn data={turn} restaurant={data} setData={setTurn} />
-                        </Row>
-                        <Row>
-                            <Col className="next-button"><Button onClick={()=> setActive(1)}>Atras</Button></Col>
-                            <Col className="next-button"><Button onClick={()=> setActive(3)} disabled={!turn}>Siguiente</Button></Col>
-                        </Row>
-                    </>
-                    }
-                    {active===3&&
-                    <>
-                        <Row>
-                            <Confirm people={people} date={date} turn={turn} />
-                        </Row>
-                        <Row>
-                            <Col className="next-button"><Button onClick={()=> setActive(2)}>Atras</Button></Col>
-                            <Col className="next-button"><Button onClick={()=> {setShow(true)}}>Crear Reserva</Button></Col>
-                        </Row>
-                    </>
-                    }
+                    <Row>
+                        <Col style={{textAlign:'center'}}><Image src={data.logo} height={250} /></Col>
+                        <Col xs={{order:window.innerWidth<=700?'first':'1'}} style={{alignContent:'center',minWidth:450}}>
+                            {active===0&&
+                            <>
+                                <Row>
+                                    <People data={people?people.toString():''} restaurant={data} setPeople={(value)=>{
+                                        const parse = parseInt(value)
+                                        if(parse&&parse>0) {
+                                            setPeople(parse)
+                                        } else {
+                                            setPeople(null)
+                                        }
+                                    }} />
+                                </Row>
+                                <Row className="buttonRow">
+                                    <Col className="next-button"></Col>
+                                    <Col className="next-button"><Button onClick={()=> setActive(1)} disabled={!people||people<1}>Siguiente</Button></Col>
+                                </Row>
+                            </>
+                            }
+                            {active===1&&
+                            <>
+                                <Row>
+                                    <Date data={date} restaurant={data} setData={setDate} />
+                                </Row>
+                                <Row className="buttonRow">
+                                    <Col className="next-button"><Button onClick={()=> setActive(0)}>Atras</Button></Col>
+                                    <Col className="next-button"><Button onClick={()=> setActive(2)} disabled={!date}>Siguiente</Button></Col>
+                                </Row>
+                            </>
+                            }
+                            {active===2&&
+                            <>
+                                <Row>
+                                    <Turn data={turn} restaurant={data} setData={setTurn} />
+                                </Row>
+                                <Row className="buttonRow">
+                                    <Col className="next-button"><Button onClick={()=> setActive(1)}>Atras</Button></Col>
+                                    <Col className="next-button"><Button onClick={()=> setActive(3)} disabled={!turn}>Siguiente</Button></Col>
+                                </Row>
+                            </>
+                            }
+                            {active===3&&
+                            <>
+                                <Row>
+                                    <Confirm people={people} date={date} turn={turn} />
+                                </Row>
+                                <Row className="buttonRow">
+                                    <Col className="next-button"><Button onClick={()=> setActive(2)}>Atras</Button></Col>
+                                    <Col className="next-button"><Button onClick={()=> {
+                                        setShow(true)
+                                    }}>Crear Reserva</Button></Col>
+                                </Row>
+                            </>
+                            }
+                        </Col>
+                        <Col xs={{order:'2'}} style={{minWidth:300}}></Col>
+                    </Row>
                 </>}
                 {loading&&<Loading />}
 

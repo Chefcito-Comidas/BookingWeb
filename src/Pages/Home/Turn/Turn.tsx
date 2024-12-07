@@ -26,7 +26,7 @@ const Turn = ({restaurant,data,setData}:Props) => {
                     value={data??''}
                     label="Hora"
                     onChange={setValue}>
-                        {restaurant.slots.map((item,index)=><MenuItem key={index} value={moment(item).format('HH:mm')}>{moment(item).format('HH:mm')}</MenuItem>)}
+                        {restaurant.slots.map((item,index)=><MenuItem key={index} value={moment(item).add(-3,'hour').local().format('HH:mm')}>{moment(item).add(-3,'hour').local().format('HH:mm')}</MenuItem>)}
                     </Select>
                 </Col>
                 <Col></Col>

@@ -26,3 +26,13 @@
     top: 10%;
     left: 25%;
 }
+
+.buttonRow{
+    margin-top: 12px !important;
+}
+
+@media screen and (max-width: 600px) {
+    .container-image{
+        background-repeat: repeat;
+    }
+}
