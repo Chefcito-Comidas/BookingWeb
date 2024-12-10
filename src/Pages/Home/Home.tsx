@@ -184,7 +184,7 @@ const Home = () => {
                     </Stepper>
                     <Row>
                         <Col style={{textAlign:'center'}}><Image src={data.logo} height={250} /></Col>
-                        <Col xs={{order:window.innerWidth<=700?'first':'1'}} style={{alignContent:'center',minWidth:450}}>
+                        <Col xs={{order:window.innerWidth<=900?'first':'1'}} style={{alignContent:'center',minWidth:450}}>
                             {active===0&&
                             <>
                                 <Row>
