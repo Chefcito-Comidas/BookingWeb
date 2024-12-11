@@ -31,7 +31,7 @@
     margin-top: 12px !important;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .container-image{
         background-repeat: repeat;
     }
