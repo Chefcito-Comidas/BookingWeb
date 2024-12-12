@@ -54,6 +54,7 @@ const Home = () => {
         email:yup.string().required(),
         password:yup.string().required(),
         phone:yup.string().required(),
+        name:yup.string().required(),
     });
 
     const createBooking = async (token:string) => {
@@ -125,7 +126,7 @@ const Home = () => {
         const token = await user?.user.getIdToken()
         if(token) {
             try {
-                await CreateUser(token)
+                await CreateUser(token,user?.user.displayName??'',user?.user.phoneNumber??'')
             } catch (err){
 
             }
@@ -145,7 +146,7 @@ const Home = () => {
         const token = await user?.getIdToken()
         if(user !== null&&token) {
             try {
-                await CreateUser(token,values.phone)
+                await CreateUser(token,values.name,values.phone)
                 await createBooking(token)
                 setShowNewAccount(false)
                 handleClose()
@@ -301,7 +302,8 @@ const Home = () => {
                                 initialValues={{
                                     email:'',
                                     password:'',
-                                    phone:''
+                                    phone:'',
+                                    name:'',
                                 }}
                         >
                             {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -311,6 +313,13 @@ const Home = () => {
                                             value={values.email}
                                             onChange={handleChange}
                                             isValid={touched.email && !errors.email}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3" controlId="name">
+                                            <Form.Control type="text" placeholder="Nombre*"
+                                            value={values.name}
+                                            onChange={handleChange}
+                                            isValid={touched.name && !errors.name}
                                             />
                                         </Form.Group>
                                         <Form.Group className="mb-3" controlId="phone">
